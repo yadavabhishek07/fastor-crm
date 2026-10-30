@@ -1,5 +1,9 @@
 # Fastor CRM — Full Stack Application
 
+> 🚀 **Live Deployment URL**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)  
+> 📝 **Public Client Enquiry Form**: [https://frontend-omega-orpin-20.vercel.app/?view=public-form](https://frontend-omega-orpin-20.vercel.app/?view=public-form)  
+> 📦 **GitHub Repository**: [https://github.com/yadavabhishek07/fastor-crm](https://github.com/yadavabhishek07/fastor-crm)
+
 A full-stack CRM built with Node.js, Express, MongoDB, and React for managing educational enquiries and counselor lead claiming.
 
 Developed by **Abhishek Yadav**.
@@ -10,9 +14,9 @@ Developed by **Abhishek Yadav**.
 
 ---
 
-## 🌐 Live Application
+## 🌐 Live Application Links
 
-- **Live Application URL**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)
+- **Live Web App**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)
 - **Public Client Enquiry Form**: [https://frontend-omega-orpin-20.vercel.app/?view=public-form](https://frontend-omega-orpin-20.vercel.app/?view=public-form)
 - **GitHub Repository**: [https://github.com/yadavabhishek07/fastor-crm](https://github.com/yadavabhishek07/fastor-crm)
 - **Postman API Collection**: [backend/fastor-crm.postman_collection.json](backend/fastor-crm.postman_collection.json)

@@ -1,5 +1,7 @@
 # Fastor CRM — Backend REST API
 
+> 🚀 **Live Demo URL**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)
+
 REST API for Fastor's counselor CRM system. Allows prospective clients to submit admission enquiries without authentication, and counselors to view and claim leads with concurrency safety.
 
 Built with Node.js, Express, MongoDB (Mongoose), and JWT.
