@@ -4,17 +4,17 @@ A full-stack CRM built with Node.js, Express, MongoDB, and React for managing ed
 
 Developed by **Abhishek Yadav**.
 
-[![Live App](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://fastor-crm-yadavabhishek07.vercel.app)
+[![Tests](https://img.shields.io/badge/Tests-17%20Passed-emerald?style=for-the-badge&logo=jest)](https://github.com/yadavabhishek07/fastor-crm)
+[![GitHub Pages](https://img.shields.io/badge/Live_Frontend-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://yadavabhishek07.github.io/fastor-crm/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/yadavabhishek07/fastor-crm)
 
 ---
 
-## 🌐 Live Application Links
+## 🌐 Live Application & Resources
 
-- **Live Application**: [https://fastor-crm-yadavabhishek07.vercel.app](https://fastor-crm-yadavabhishek07.vercel.app)
-- **Public Client Enquiry Form**: [https://fastor-crm-yadavabhishek07.vercel.app/?view=public-form](https://fastor-crm-yadavabhishek07.vercel.app/?view=public-form)
-- **API Health Check**: [https://fastor-crm-yadavabhishek07.vercel.app/health](https://fastor-crm-yadavabhishek07.vercel.app/health)
-- **Swagger API Docs**: [https://fastor-crm-yadavabhishek07.vercel.app/api-docs](https://fastor-crm-yadavabhishek07.vercel.app/api-docs)
+- **Live Client Admission Portal**: [https://yadavabhishek07.github.io/fastor-crm/](https://yadavabhishek07.github.io/fastor-crm/)
+- **GitHub Repository**: [https://github.com/yadavabhishek07/fastor-crm](https://github.com/yadavabhishek07/fastor-crm)
+- **Postman API Collection**: [backend/fastor-crm.postman_collection.json](backend/fastor-crm.postman_collection.json)
 
 ---
 
