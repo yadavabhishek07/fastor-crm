@@ -126,3 +126,4 @@ A pre-configured `render.yaml` is included in the project root.
 ## Postman Collection
 
 Import `backend/fastor-crm.postman_collection.json` into Postman. Requests have pre-configured test scripts that automatically save your JWT token to collection variables after login or register.
+# fastor-crm
