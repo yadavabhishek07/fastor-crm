@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import PublicEnquiryForm from './components/PublicEnquiryForm';
@@ -212,6 +213,7 @@ export default function App() {
           </div>
         </footer>
       </div>
+      <SpeedInsights />
     </AuthProvider>
   );
 }
