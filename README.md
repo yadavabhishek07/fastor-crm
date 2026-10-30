@@ -4,15 +4,16 @@ A full-stack CRM built with Node.js, Express, MongoDB, and React for managing ed
 
 Developed by **Abhishek Yadav**.
 
+[![Live App](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://frontend-omega-orpin-20.vercel.app)
 [![Tests](https://img.shields.io/badge/Tests-17%20Passed-emerald?style=for-the-badge&logo=jest)](https://github.com/yadavabhishek07/fastor-crm)
-[![GitHub Pages](https://img.shields.io/badge/Live_Frontend-GitHub_Pages-blue?style=for-the-badge&logo=github)](https://yadavabhishek07.github.io/fastor-crm/)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/yadavabhishek07/fastor-crm)
 
 ---
 
-## 🌐 Live Application & Resources
+## 🌐 Live Application
 
-- **Live Client Admission Portal**: [https://yadavabhishek07.github.io/fastor-crm/](https://yadavabhishek07.github.io/fastor-crm/)
+- **Live Application URL**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)
+- **Public Client Enquiry Form**: [https://frontend-omega-orpin-20.vercel.app/?view=public-form](https://frontend-omega-orpin-20.vercel.app/?view=public-form)
 - **GitHub Repository**: [https://github.com/yadavabhishek07/fastor-crm](https://github.com/yadavabhishek07/fastor-crm)
 - **Postman API Collection**: [backend/fastor-crm.postman_collection.json](backend/fastor-crm.postman_collection.json)
 
