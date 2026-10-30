@@ -9,7 +9,7 @@ A full-stack Customer Relationship Management (CRM) system designed for educatio
 
 ---
 
-## 🔗 Quick Links
+## Quick Links
 
 - **Live Application**: [https://frontend-omega-orpin-20.vercel.app](https://frontend-omega-orpin-20.vercel.app)
 - **Public Student Admission Form**: [https://frontend-omega-orpin-20.vercel.app/?view=public-form](https://frontend-omega-orpin-20.vercel.app/?view=public-form)
@@ -17,7 +17,7 @@ A full-stack Customer Relationship Management (CRM) system designed for educatio
 
 ---
 
-## ⚡ Core Features
+## Core Features
 
 - **Public Enquiry Form**: Prospective students can submit admission enquiries (`Name`, `Email`, `Phone`, `Course`, `Notes`) without authentication.
 - **Counselor Authentication**: Secure employee registration and login using `bcryptjs` password hashing and JWT Bearer tokens.
@@ -28,7 +28,7 @@ A full-stack Customer Relationship Management (CRM) system designed for educatio
 
 ---
 
-## 📡 REST API Reference
+## REST API Reference
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
@@ -43,7 +43,7 @@ A full-stack Customer Relationship Management (CRM) system designed for educatio
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Backend**: Node.js, Express.js, MongoDB (Mongoose), JWT, bcryptjs, express-validator, helmet, cors
 - **Frontend**: React 18, Vite, Tailwind CSS, Lucide Icons
@@ -52,7 +52,7 @@ A full-stack Customer Relationship Management (CRM) system designed for educatio
 
 ---
 
-## 🚀 Local Setup
+## Local Setup
 
 ### 1. Clone & Install
 ```bash
@@ -76,7 +76,7 @@ npm run dev
 
 ---
 
-## 🧪 Automated Testing
+## Automated Testing
 
 Run the full integration test suite (17 tests covering auth, lead lifecycle, and concurrent race conditions):
 
@@ -96,7 +96,7 @@ Tests:       17 passed, 17 total
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Abhishek Yadav**  
 GitHub: [@yadavabhishek07](https://github.com/yadavabhishek07)
