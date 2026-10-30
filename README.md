@@ -4,6 +4,18 @@ A full-stack CRM built with Node.js, Express, MongoDB, and React for managing ed
 
 Developed by **Abhishek Yadav**.
 
+[![Live App](https://img.shields.io/badge/Live_Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://fastor-crm-yadavabhishek07.vercel.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/yadavabhishek07/fastor-crm)
+
+---
+
+## 🌐 Live Application Links
+
+- **Live Application**: [https://fastor-crm-yadavabhishek07.vercel.app](https://fastor-crm-yadavabhishek07.vercel.app)
+- **Public Client Enquiry Form**: [https://fastor-crm-yadavabhishek07.vercel.app/?view=public-form](https://fastor-crm-yadavabhishek07.vercel.app/?view=public-form)
+- **API Health Check**: [https://fastor-crm-yadavabhishek07.vercel.app/health](https://fastor-crm-yadavabhishek07.vercel.app/health)
+- **Swagger API Docs**: [https://fastor-crm-yadavabhishek07.vercel.app/api-docs](https://fastor-crm-yadavabhishek07.vercel.app/api-docs)
+
 ---
 
 ## Architecture & Flow

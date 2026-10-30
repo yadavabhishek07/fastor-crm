@@ -25,5 +25,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "author": "Abhishek Yadav",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "vercel": "^65.8.0"
+  }
 }

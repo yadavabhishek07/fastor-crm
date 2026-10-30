@@ -4,6 +4,10 @@ REST API for Fastor's counselor CRM system. Allows prospective clients to submit
 
 Built with Node.js, Express, MongoDB (Mongoose), and JWT.
 
+**Live Base API**: [https://fastor-crm-yadavabhishek07.vercel.app](https://fastor-crm-yadavabhishek07.vercel.app)  
+**Swagger Docs**: [https://fastor-crm-yadavabhishek07.vercel.app/api-docs](https://fastor-crm-yadavabhishek07.vercel.app/api-docs)  
+**Health Check**: [https://fastor-crm-yadavabhishek07.vercel.app/health](https://fastor-crm-yadavabhishek07.vercel.app/health)
+
 ---
 
 ## Features & Endpoints
