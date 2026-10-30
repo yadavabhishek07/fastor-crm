@@ -1,96 +1,74 @@
-# Fastor CRM — Backend REST API (Node.js Developer Assignment)
+# Fastor CRM — Backend REST API
 
-A robust, production-grade Customer Relationship Management (CRM) backend REST API built for Fastor's counselor & enquiry workflow.
+REST API for Fastor's counselor CRM system. Allows prospective clients to submit admission enquiries without authentication, and counselors to view and claim leads with concurrency safety.
 
----
-
-## 🎯 System Business Logic
-
-1. **Employee / Counselor Accounts**: Each employee/counselor is associated with their unique company email. Authentication is secured using JSON Web Tokens (JWT) and `bcryptjs`.
-2. **Public Enquiry Form**: A publicly accessible endpoint allows prospective students/clients to submit enquiry details (`name`, `email`, `phone`, `courseInterest`, `notes`) without any authentication.
-3. **Public Lead Pool**: Inside the CRM, counselors can view all incoming unclaimed enquiries (public leads).
-4. **Atomic Lead Claiming**: Counselors can "Claim" an unclaimed public lead. Claiming immediately assigns the lead to that counselor, transforming it into a private lead invisible to any other employee.
-5. **Concurrency Protection**: High-volume race condition prevention using atomic database updates (`findOneAndUpdate` with `claimedBy: null`). If multiple counselors attempt to claim the exact same lead simultaneously, exactly one succeeds, while all other requests receive an explicit `409 Conflict`.
+Built with Node.js, Express, MongoDB (Mongoose), and JWT.
 
 ---
 
-## 📋 Acceptance Criteria Checklist
+## Features & Endpoints
 
-| Acceptance Criterion | Endpoint | Method | Authentication | Status |
-| :--- | :--- | :--- | :--- | :--- |
-| **Employee Registration** | `/api/auth/register` | `POST` | Public | ✅ Implemented |
-| **Employee Login** | `/api/auth/login` | `POST` | Public | ✅ Implemented |
-| **Get Counselor Profile** | `/api/auth/me` | `GET` | Bearer JWT | ✅ Implemented |
-| **Public Lead Submission** | `/api/enquiries` | `POST` | Public (No Auth) | ✅ Implemented |
-| **Fetch Unclaimed Leads** | `/api/enquiries/public` | `GET` | Bearer JWT | ✅ Implemented |
-| **Atomic Claim Lead** | `/api/enquiries/:id/claim` | `POST` | Bearer JWT | ✅ Implemented |
-| **Fetch My Claimed Leads** | `/api/enquiries/mine` | `GET` | Bearer JWT | ✅ Implemented |
-| **Interactive Swagger Docs** | `/api-docs` | `GET` | Public | ✅ Implemented |
-| **Health Check** | `/health` | `GET` | Public | ✅ Implemented |
+### 1. Authentication (`/api/auth`)
+- `POST /api/auth/register`: Register a new employee/counselor (`name`, `email`, `password`, `role`).
+- `POST /api/auth/login`: Authenticate with email & password, returns JWT token.
+- `GET /api/auth/me`: Fetch current logged-in employee profile (Bearer JWT required).
 
----
+### 2. Public Form API (`/api/enquiries`)
+- `POST /api/enquiries`: Public admission enquiry capture (`name`, `email`, `phone`, `courseInterest`, `notes`). No authentication required. Stored with status `unclaimed`.
 
-## 🛠️ Tech Stack
-
-- **Runtime**: Node.js (v18+)
-- **Framework**: Express.js
-- **Database**: MongoDB via Mongoose
-- **Authentication**: JWT (`jsonwebtoken`) & `bcryptjs`
-- **Validation**: `express-validator`
-- **Security**: `helmet`, `cors`
-- **Testing**: `jest`, `supertest`, `mongodb-memory-server`
-- **API Documentation**: Swagger UI (`swagger-ui-express`, OpenAPI 3.0)
+### 3. CRM Lead Management (`/api/enquiries`)
+- `GET /api/enquiries/public`: Fetch unclaimed leads with pagination (`page`, `limit`), optional `course` filter, and `search`. Bearer JWT required.
+- `POST /api/enquiries/:id/claim`: Atomically claim a public lead. Prevents race conditions with `findOneAndUpdate({ _id, claimedBy: null })`. Returns `409 Conflict` if already claimed. Bearer JWT required.
+- `GET /api/enquiries/mine`: Fetch only leads claimed by the requesting counselor. Bearer JWT required.
+- `GET /api/enquiries/:id`: Fetch single enquiry detail (accessible by the claiming counselor or admin). Bearer JWT required.
 
 ---
 
-## 🚀 Quick Start Guide
+## Concurrency Protection
 
-### 1. Install Dependencies
+Lead claiming handles high-volume race conditions directly at the database query level:
+
+```javascript
+const enquiry = await Enquiry.findOneAndUpdate(
+  { _id: id, claimedBy: null },
+  {
+    $set: {
+      claimedBy: counselorId,
+      claimedAt: new Date(),
+      status: 'claimed'
+    }
+  },
+  { new: true, runValidators: true }
+);
+```
+
+If multiple counselors attempt to claim the same lead at the same time:
+- Exactly **one** counselor's write will match `claimedBy: null` and succeed.
+- Any subsequent or simultaneous requests will find no matching document and receive a `409 Conflict` HTTP response.
+
+---
+
+## Setup & Running
+
 ```bash
-cd backend
+# Install dependencies
 npm install
-```
 
-### 2. Configure Environment Variables
-Create a `.env` file from `.env.example`:
-```bash
-cp .env.example .env
-```
-> **Zero-Setup In-Memory Mode**: If `MONGO_URI` is left blank in `.env`, the server automatically starts an embedded in-memory MongoDB server. You can run and test the entire backend immediately without needing an external MongoDB server or Atlas cluster!
->
-> If you have a local MongoDB or MongoDB Atlas URI, set:
-> ```env
-> MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/fastor_crm
-> ```
-
-### 3. Start Development Server
-```bash
+# Start development server
 npm run dev
-```
-The server will boot on `http://localhost:5000`.
 
-- **Swagger Documentation**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
-- **Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
-
----
-
-## 🧪 Running Automated Tests
-
-A comprehensive suite covering authentication, data validation, enquiry workflows, and concurrency race conditions is included:
-
-```bash
+# Run automated tests
 npm test
 ```
 
-### Test Coverage Highlights:
-- **Unit & Integration Tests**: Checks employee registration, duplicate prevention, password encryption, token expiration, public lead creation, and claim access controls.
-- **Race Condition Concurrency Test**: Fires 5 simultaneous claim requests against the same lead at the exact same millisecond using `Promise.all`. Verifies that exactly one counselor succeeds (`200 OK`) and the remaining 4 receive `409 Conflict`.
+### Environment Variables (.env)
+```env
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=7d
+MONGO_URI=mongodb+srv://...  # Optional: leave empty for in-memory MongoDB
+```
 
----
-
-## 📬 Postman Collection
-
-A ready-to-use Postman collection is included in:
-`backend/fastor-crm.postman_collection.json`
-
-Import it into Postman to test all endpoints. Login and register endpoints automatically extract and store the JWT Bearer token into collection variables.
+Interactive Swagger documentation is available at:
+`http://localhost:5000/api-docs`

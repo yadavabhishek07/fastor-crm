@@ -127,7 +127,7 @@ function CRMContent({ activeView, setActiveView }) {
           <div>
             <h2 className="text-xl font-bold text-slate-900">Share Client Enquiry Form</h2>
             <p className="text-sm text-slate-500 mt-1 max-w-md mx-auto">
-              Per specification: This form can be circulated online or shared directly by the counselor during student phone calls.
+              Share this link with prospective students via chat, email, or directly while on a call.
             </p>
           </div>
 
@@ -190,23 +190,23 @@ export default function App() {
         {/* Global Footer */}
         <footer className="border-t border-slate-200 bg-white py-6 mt-16 text-center text-xs text-slate-500">
           <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-            <span>Fastor CRM System — Node.js & React Developer Assessment</span>
+            <span>Fastor CRM — Lead & Admissions Management</span>
             <div className="flex items-center space-x-4">
               <a
-                href="http://localhost:5000/api-docs"
+                href="/api-docs"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-orange-600 transition"
               >
-                Swagger API Docs
+                API Docs (Swagger)
               </a>
               <a
-                href="http://localhost:5000/health"
+                href="/health"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-orange-600 transition"
               >
-                API Health Check
+                Health Check
               </a>
             </div>
           </div>

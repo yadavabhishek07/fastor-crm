@@ -1,13 +1,16 @@
 {
-  "name": "fastor-fullstack-crm",
+  "name": "fastor-crm",
   "version": "1.0.0",
-  "description": "Fastor Full Stack Developer Assignment - Node.js CRM Backend REST API & React Frontend",
+  "description": "Fastor CRM Lead Management System - Full Stack Application",
+  "main": "backend/src/server.js",
   "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build": "npm --prefix frontend run build",
+    "start": "node backend/src/server.js",
     "start:backend": "cd backend && npm start",
     "dev:backend": "cd backend && npm run dev",
-    "test:backend": "cd backend && npm test",
     "dev:frontend": "cd frontend && npm run dev",
-    "build:frontend": "cd frontend && npm run build"
+    "test": "cd backend && npm test"
   },
   "author": "Abhishek Yadav",
   "license": "ISC"

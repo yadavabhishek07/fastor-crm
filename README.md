@@ -1,158 +1,128 @@
-# Fastor CRM — Full Stack Developer Assignment
+# Fastor CRM — Full Stack Application
 
-A complete, production-ready Full Stack Customer Relationship Management (CRM) system designed and built for Fastor's counselor & enquiry workflow.
+A full-stack CRM built with Node.js, Express, MongoDB, and React for managing educational enquiries and counselor lead claiming.
 
-- **Backend**: Node.js, Express, MongoDB (Mongoose), JWT Auth, Atomic Concurrency Claiming, Jest/Supertest suite, Swagger OpenAPI 3.0 docs.
-- **Frontend**: React 18, Vite, Tailwind CSS, Lucide Icons, interactive counselor dashboard & public client admission enquiry form.
-
----
-
-## 🏛️ System Architecture & Workflow
-
-```
-+-------------------------------------------------------------------------+
-|                           Fastor CRM Ecosystem                          |
-+-------------------------------------------------------------------------+
-
-  [ Prospective Client / Student ]              [ Counselor / Employee ]
-                 │                                         │
-        (No Authentication)                          (JWT Bearer)
-                 ▼                                         ▼
-   POST /api/enquiries (Form)               GET /api/enquiries/public (Leads)
-                 │                                         │
-                 ▼                                         ▼
-  ┌───────────────────────────────┐         ┌───────────────────────────────┐
-  │       MongoDB Enquiry         │         │   POST /api/enquiries/:id     │
-  │ status: "unclaimed"           │◄────────┤            /claim             │
-  │ claimedBy: null               │         │   (Atomic Concurrency Lock)   │
-  └───────────────────────────────┘         └───────────────────────────────┘
-                                                           │
-                                                           ▼
-                                            ┌───────────────────────────────┐
-                                            │       Private Lead State      │
-                                            │ status: "claimed"             │
-                                            │ claimedBy: counselor._id      │
-                                            │ claimedAt: Timestamp          │
-                                            └───────────────────────────────┘
-                                                           │
-                                                           ▼
-                                            GET /api/enquiries/mine
-                                            (Visible ONLY to this Counselor)
-```
+Developed by **Abhishek Yadav**.
 
 ---
 
-## 📋 Acceptance Criteria Mapping
+## Architecture & Flow
 
-| Acceptance Criterion | Implementation Details | Endpoint | Status |
-| :--- | :--- | :--- | :--- |
-| **API for Employee Register & Login** | Secured with `bcryptjs` password hashing and signed JWT Bearer tokens | `POST /api/auth/register`<br>`POST /api/auth/login` | ✅ Completed |
-| **Public Form API (No Auth)** | Prospective client lead capture (`name`, `email`, `phone`, `courseInterest`, `notes`) | `POST /api/enquiries` | ✅ Completed |
-| **API to Claim Leads** | Atomic `findOneAndUpdate({ _id, claimedBy: null })` preventing double-claiming and returning `409 Conflict` on race conditions | `POST /api/enquiries/:id/claim` | ✅ Completed |
-| **API to Fetch Unclaimed Leads** | Returns only active public leads (`claimedBy: null`) with pagination & search | `GET /api/enquiries/public` | ✅ Completed |
-| **API to Fetch Claimed Leads** | Returns only leads private to the logged-in counselor (`claimedBy: req.user._id`) | `GET /api/enquiries/mine` | ✅ Completed |
+1. **Counselor Authentication**: Employees sign up and log in using their email. Passwords are encrypted with bcrypt, and sessions use JWT Bearer tokens.
+2. **Public Enquiry Form**: A client-facing admission form (`POST /api/enquiries`) accessible without authentication. Leads are saved as `unclaimed`.
+3. **Public Leads Feed**: Logged-in counselors can view all unclaimed enquiries.
+4. **Atomic Lead Claiming**: Counselors can claim any public lead. Once claimed, the enquiry transitions to `claimed` status, assigns `claimedBy`, and becomes private to that counselor.
+5. **Concurrency Safety**: Lead claiming uses MongoDB's atomic `findOneAndUpdate` filter `{ _id, claimedBy: null }`. If two counselors click "Claim" at the exact same millisecond, only one claim succeeds with `200 OK`, and the other receives `409 Conflict`.
+6. **My Leads Feed**: Counselors have a private view of all leads they have claimed (`GET /api/enquiries/mine`).
 
 ---
 
-## 📁 Repository Structure
+## Core Acceptance Criteria
 
-```text
-fastor/
-├── backend/
-│   ├── src/
-│   │   ├── config/
-│   │   │   ├── db.js             # DB connector with MongoMemoryServer fallback
-│   │   │   └── swagger.js        # OpenAPI 3.0 Swagger specifications
-│   │   ├── controllers/
-│   │   │   ├── authController.js    # Register, login, profile endpoints
-│   │   │   └── enquiryController.js # Public submit, public list, claim, my leads
-│   │   ├── middleware/
-│   │   │   ├── auth.js           # JWT Bearer token verification
-│   │   │   ├── errorHandler.js   # Global error & duplicate key handlers
-│   │   │   └── validate.js       # express-validator schemas
-│   │   ├── models/
-│   │   │   ├── Employee.js       # Counselor schema with bcrypt hashing
-│   │   │   └── Enquiry.js        # Lead schema with compound indexes
-│   │   ├── routes/
-│   │   │   ├── authRoutes.js     # Auth routing
-│   │   │   └── enquiryRoutes.js  # Enquiry & claim routing
-│   │   ├── app.js                # Express application configuration
-│   │   └── server.js             # HTTP server entrypoint
-│   ├── tests/
-│   │   ├── setup.js              # In-memory MongoDB testing environment
-│   │   ├── auth.test.js          # Authentication integration tests
-│   │   ├── enquiry.test.js       # CRM enquiry lifecycle integration tests
-│   │   └── concurrency.test.js   # High-concurrency race condition test
-│   ├── fastor-crm.postman_collection.json # Exported Postman collection
-│   ├── .env.example
-│   ├── package.json
-│   └── README.md
-├── frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.jsx            # Responsive navigation & counselor status
-│   │   │   ├── PublicEnquiryForm.jsx # Prospective student form (No auth)
-│   │   │   ├── LoginForm.jsx         # Counselor sign-in with quick demo fill
-│   │   │   ├── RegisterForm.jsx      # Counselor sign-up
-│   │   │   ├── PublicLeadsView.jsx   # Public unclaimed leads grid with Claim action
-│   │   │   ├── MyLeadsView.jsx       # Private claimed leads management
-│   │   │   └── LeadCard.jsx          # Lead card with contact actions
-│   │   ├── context/
-│   │   │   └── AuthContext.jsx       # Global auth & JWT state
-│   │   ├── services/
-│   │   │   └── api.js                # Clean fetch client with Bearer auth injection
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── package.json
-│   ├── vite.config.js
-│   └── tailwind.config.js
-├── package.json
-└── README.md
+| Feature | Endpoint | Method | Auth | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Employee Register** | `/api/auth/register` | `POST` | None | Create counselor account |
+| **Employee Login** | `/api/auth/login` | `POST` | None | Verify credentials & issue JWT |
+| **Current User** | `/api/auth/me` | `GET` | Bearer JWT | Fetch logged-in counselor profile |
+| **Public Lead Submission** | `/api/enquiries` | `POST` | None | Submit prospective student enquiry |
+| **Fetch Unclaimed Leads** | `/api/enquiries/public` | `GET` | Bearer JWT | View all open public leads |
+| **Claim Lead** | `/api/enquiries/:id/claim` | `POST` | Bearer JWT | Atomically claim lead |
+| **Fetch My Claimed Leads** | `/api/enquiries/mine` | `GET` | Bearer JWT | View leads claimed by logged-in counselor |
+| **Swagger Documentation** | `/api-docs` | `GET` | None | Interactive OpenAPI 3.0 explorer |
+| **Health Check** | `/health` | `GET` | None | Service status |
+
+---
+
+## Tech Stack
+
+- **Backend**: Node.js, Express.js, MongoDB / Mongoose, JWT (`jsonwebtoken`), `bcryptjs`, `express-validator`, `helmet`, `cors`.
+- **Frontend**: React 18, Vite, Tailwind CSS, Lucide icons.
+- **Testing**: Jest, Supertest, `mongodb-memory-server`.
+- **API Docs**: Swagger UI (`swagger-ui-express`).
+
+---
+
+## Local Development
+
+### Prerequisites
+- Node.js (v18+)
+- npm (v9+)
+
+### 1. Install Dependencies
+```bash
+# Install backend and frontend dependencies
+npm run install:all
 ```
 
----
-
-## ⚡ Quick Start
-
-### 1. Backend Setup
+### 2. Run Backend
 ```bash
 cd backend
-npm install
 npm run dev
 ```
-> **Zero-Setup Mode**: If no `MONGO_URI` is provided in `.env`, the backend will automatically spin up an embedded in-memory MongoDB server. You do not need to install MongoDB locally or configure Atlas to test it!
+> **Note**: If `MONGO_URI` is left blank in `backend/.env`, an embedded in-memory MongoDB automatically starts. You can run the entire app locally without needing a local MongoDB or external database installed.
+>
+> If you have a MongoDB Atlas connection string, you can set it in `backend/.env`:
+> ```env
+> MONGO_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/fastor_crm
+> ```
 
-- **Swagger API Documentation**: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
-- **Health Check**: [http://localhost:5000/health](http://localhost:5000/health)
+- Backend URL: [http://localhost:5000](http://localhost:5000)
+- Swagger API Docs: [http://localhost:5000/api-docs](http://localhost:5000/api-docs)
+- Health check: [http://localhost:5000/health](http://localhost:5000/health)
 
-### 2. Frontend Setup
+### 3. Run Frontend
 In a separate terminal:
 ```bash
 cd frontend
-npm install
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 🧪 Automated Test Suite
+## Running Automated Tests
 
-Run the full automated test suite covering all business logic, validation, authentication, and concurrency race conditions:
+Run the test suite from the backend directory:
 
 ```bash
 cd backend
 npm test
 ```
 
-### Concurrency Race Condition Proof
-In `backend/tests/concurrency.test.js`, 5 counselors attempt to claim the exact same lead simultaneously using `Promise.all`. The test verifies:
-- Exactly 1 counselor receives `200 OK`.
-- The other 4 counselors receive `409 Conflict`.
-- Database integrity is maintained with zero double-claims.
+### What is tested:
+1. `tests/auth.test.js`: Employee registration, password hashing, token generation, duplicate email rejection, invalid login credentials, and JWT route guards.
+2. `tests/enquiry.test.js`: Public form submissions (no auth), fetching unclaimed public leads, claiming leads, preventing double claims, and private lead isolation between different counselors.
+3. `tests/concurrency.test.js`: Simulates 5 counselors attempting to claim the exact same lead simultaneously using `Promise.all`. Verifies that exactly 1 succeeds and 4 receive `409 Conflict`.
 
 ---
 
-## 📬 Postman Collection
-Import `backend/fastor-crm.postman_collection.json` into Postman. It contains pre-configured requests, environment variables, and automatic JWT token extraction scripts.
+## Deployment Guide
+
+### Option 1: Unified Single-Service Deployment (Render / Railway)
+The backend is configured to serve the built frontend assets from `frontend/dist` in production.
+
+1. Build command:
+   ```bash
+   npm run install:all && npm run build
+   ```
+2. Start command:
+   ```bash
+   npm start
+   ```
+3. Environment variables:
+   - `NODE_ENV`: `production`
+   - `PORT`: `10000` (or host assigned)
+   - `JWT_SECRET`: your secret string
+   - `MONGO_URI`: your MongoDB Atlas connection string
+
+A pre-configured `render.yaml` is included in the project root.
+
+### Option 2: Split Deployment (Vercel Frontend + Render Backend)
+- **Frontend on Vercel**: Import the `frontend` directory. Set `VITE_API_URL` to your deployed backend URL. A `frontend/vercel.json` rewrite configuration is provided.
+- **Backend on Render/Railway**: Deploy the `backend` directory.
+
+---
+
+## Postman Collection
+
+Import `backend/fastor-crm.postman_collection.json` into Postman. Requests have pre-configured test scripts that automatically save your JWT token to collection variables after login or register.

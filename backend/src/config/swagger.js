@@ -12,8 +12,12 @@ const swaggerJsDoc = {
   },
   servers: [
     {
+      url: '/',
+      description: 'Current Environment'
+    },
+    {
       url: 'http://localhost:5000',
-      description: 'Local Development Server'
+      description: 'Local Server'
     }
   ],
   components: {

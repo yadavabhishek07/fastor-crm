@@ -1,8 +1,5 @@
 const Enquiry = require('../models/Enquiry');
 
-// @desc    Submit public enquiry form (Prospective Client Lead)
-// @route   POST /api/enquiries
-// @access  Public (No authentication required)
 const submitPublicEnquiry = async (req, res, next) => {
   try {
     const { name, email, phone, courseInterest, notes } = req.body;
@@ -21,7 +18,7 @@ const submitPublicEnquiry = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: 'Enquiry submitted successfully! A counselor will reach out shortly.',
+      message: 'Enquiry submitted successfully.',
       enquiry
     });
   } catch (error) {
@@ -29,9 +26,6 @@ const submitPublicEnquiry = async (req, res, next) => {
   }
 };
 
-// @desc    Fetch all unclaimed (public) leads for CRM counselors
-// @route   GET /api/enquiries/public
-// @access  Private (Employee authentication required)
 const getPublicEnquiries = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
@@ -75,15 +69,12 @@ const getPublicEnquiries = async (req, res, next) => {
   }
 };
 
-// @desc    Claim an enquiry to make it private to logged-in counselor
-// @route   POST /api/enquiries/:id/claim
-// @access  Private (Employee authentication required)
 const claimEnquiry = async (req, res, next) => {
   try {
     const { id } = req.params;
     const counselorId = req.user._id;
 
-    // Atomic update to prevent race conditions when multiple counselors claim concurrently
+    // Atomic findOneAndUpdate prevents race conditions between multiple counselors
     const enquiry = await Enquiry.findOneAndUpdate(
       { _id: id, claimedBy: null },
       {
@@ -96,7 +87,6 @@ const claimEnquiry = async (req, res, next) => {
       { new: true, runValidators: true }
     ).populate('claimedBy', 'name email');
 
-    // If no document was updated, determine the exact conflict reason
     if (!enquiry) {
       const existing = await Enquiry.findById(id).populate('claimedBy', 'name email');
       if (!existing) {
@@ -119,13 +109,13 @@ const claimEnquiry = async (req, res, next) => {
 
       return res.status(400).json({
         success: false,
-        message: 'Unable to claim enquiry.'
+        message: 'Could not claim this enquiry.'
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'Enquiry successfully claimed and assigned to your account.',
+      message: 'Enquiry claimed successfully.',
       enquiry
     });
   } catch (error) {
@@ -133,9 +123,6 @@ const claimEnquiry = async (req, res, next) => {
   }
 };
 
-// @desc    Fetch all leads claimed by the currently logged-in counselor
-// @route   GET /api/enquiries/mine
-// @access  Private (Employee authentication required)
 const getMyClaimedEnquiries = async (req, res, next) => {
   try {
     const page = parseInt(req.query.page, 10) || 1;
@@ -179,9 +166,6 @@ const getMyClaimedEnquiries = async (req, res, next) => {
   }
 };
 
-// @desc    Get single enquiry by ID
-// @route   GET /api/enquiries/:id
-// @access  Private (Employee authentication required)
 const getEnquiryById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -194,7 +178,6 @@ const getEnquiryById = async (req, res, next) => {
       });
     }
 
-    // Access control: If claimed, only the claiming counselor or an admin can access
     if (
       enquiry.claimedBy &&
       enquiry.claimedBy._id.toString() !== req.user._id.toString() &&
@@ -202,7 +185,7 @@ const getEnquiryById = async (req, res, next) => {
     ) {
       return res.status(403).json({
         success: false,
-        message: 'Forbidden: This enquiry is private to another counselor.'
+        message: 'Access denied: This enquiry is claimed by another counselor.'
       });
     }
 

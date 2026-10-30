@@ -208,15 +208,15 @@ export default function PublicEnquiryForm() {
             ) : (
               <>
                 <Send className="w-4 h-4" />
-                <span>Submit Prospective Client Enquiry</span>
+                <span>Submit Enquiry</span>
               </>
             )}
           </button>
         </form>
 
         <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-          <span>🔒 No login required for clients</span>
-          <span>⚡ Live REST API endpoint: POST /api/enquiries</span>
+          <span>We keep your information strictly confidential</span>
+          <span>A counselor will reach out within 24 hours</span>
         </div>
       </div>
     </div>

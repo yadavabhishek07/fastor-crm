@@ -1,29 +1,20 @@
 const jwt = require('jsonwebtoken');
 const Employee = require('../models/Employee');
 
-const generateToken = (employee) => {
-  const secret = process.env.JWT_SECRET || 'fastor-crm-jwt-secret-key-2026';
-  const expiresIn = process.env.JWT_EXPIRES_IN || '7d';
+const createToken = (user) => {
   return jwt.sign(
-    {
-      id: employee._id,
-      email: employee.email,
-      role: employee.role
-    },
-    secret,
-    { expiresIn }
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET || 'fastor-crm-jwt-secret-key-2026',
+    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   );
 };
 
-// @desc    Register new employee/counselor
-// @route   POST /api/auth/register
-// @access  Public
 const register = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
 
-    const existingEmployee = await Employee.findOne({ email });
-    if (existingEmployee) {
+    const existingUser = await Employee.findOne({ email });
+    if (existingUser) {
       return res.status(409).json({
         success: false,
         message: 'An employee with this email is already registered.'
@@ -37,11 +28,11 @@ const register = async (req, res, next) => {
       role: role || 'counselor'
     });
 
-    const token = generateToken(employee);
+    const token = createToken(employee);
 
     res.status(201).json({
       success: true,
-      message: 'Employee registered successfully',
+      message: 'Registration successful',
       token,
       employee: {
         id: employee._id,
@@ -56,9 +47,6 @@ const register = async (req, res, next) => {
   }
 };
 
-// @desc    Authenticate employee & return token
-// @route   POST /api/auth/login
-// @access  Public
 const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -79,7 +67,7 @@ const login = async (req, res, next) => {
       });
     }
 
-    const token = generateToken(employee);
+    const token = createToken(employee);
 
     res.status(200).json({
       success: true,
@@ -98,9 +86,6 @@ const login = async (req, res, next) => {
   }
 };
 
-// @desc    Get current logged in employee profile
-// @route   GET /api/auth/me
-// @access  Private (Bearer JWT)
 const getMe = async (req, res, next) => {
   try {
     res.status(200).json({

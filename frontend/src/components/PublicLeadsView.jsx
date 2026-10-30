@@ -96,7 +96,7 @@ export default function PublicLeadsView({ onLeadClaimed }) {
         <div className="p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 flex items-center space-x-3 text-sm shadow-sm">
           <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0" />
           <div className="flex-1">
-            <span className="font-semibold">Race Condition Handled:</span> {conflictMessage}
+            <span className="font-semibold">Notice:</span> {conflictMessage}
           </div>
         </div>
       )}

@@ -87,7 +87,7 @@ export default function LoginForm({ onSwitchToRegister }) {
           className="w-full py-2.5 rounded-xl bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm shadow-md shadow-orange-500/20 transition disabled:opacity-60 flex items-center justify-center space-x-2"
         >
           <LogIn className="w-4 h-4" />
-          <span>{loading ? 'Authenticating...' : 'Sign In with JWT'}</span>
+          <span>{loading ? 'Signing in...' : 'Sign In'}</span>
         </button>
       </form>
 
@@ -97,7 +97,7 @@ export default function LoginForm({ onSwitchToRegister }) {
           onClick={handleFillDemo}
           className="text-xs text-orange-600 font-semibold hover:underline"
         >
-          ⚡ Auto-fill demo counselor credentials
+          Fill demo account (Jane Counselor)
         </button>
         <p className="text-xs text-slate-500">
           New counselor?{' '}
